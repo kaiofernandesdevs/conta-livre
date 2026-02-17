@@ -1,5 +1,5 @@
-import * as contaRepository from '../repository/contaRepository.js';
-import * as pedidoRepository from '../repository/pedidoRepository.js';
+import * as contaRepository from '../repositorys/contaRepository.js';
+import * as pedidoRepository from '../repositorys/pedidoRepository.js';
 
 export async function abrirConta(clienteId) {  
   if (!clienteId) {

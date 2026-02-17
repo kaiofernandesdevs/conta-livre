@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import * as service from '../service/contaService.js';
+import * as service from '../services/contaService.js';
 
 const endpoints = Router();
 

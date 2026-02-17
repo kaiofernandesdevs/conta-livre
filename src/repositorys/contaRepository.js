@@ -9,14 +9,12 @@ export async function criarConta(clienteId) {
 
 export async function buscarContaPorId(contaId) {
     const comando = `SELECT * FROM conta WHERE id = ?`;
-
     const [info] = await connection.query(comando, [contaId]);
-    return info;
+    return info[0];
 }
 
 export async function listarContas() {
     const comando = `SELECT * FROM conta;`;
-
     const [info] = await connection.query(comando);
     return info;
 };

@@ -1,5 +1,5 @@
-import contaController from '../controller/contaController.js';
-import pedidoController from '../controller/pedidoController.js';
+import contaController from '../controllers/contaController.js';
+import pedidoController from '../controllers/pedidoController.js';
 
 export function addRoutes(API) {
     API.use(contaController);
