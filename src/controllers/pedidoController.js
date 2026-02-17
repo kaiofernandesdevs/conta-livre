@@ -1,7 +1,6 @@
 import { Router } from "express";
 import * as service from '../services/pedidoService.js';
 
-
 const endpoints = Router();
 
 
