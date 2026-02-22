@@ -11,3 +11,9 @@ export async function criarProduto(novoProduto) {
     return info.insertId;
 }
 
+export async function listaProdutos() {
+    const comando = `SELECT * FROM produto`;
+
+    const [info] = await connection.query(comando);
+    return info;
+}

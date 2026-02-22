@@ -11,3 +11,7 @@ export async function criarProduto(novoProduto) {
 
     return await produtoRepository.criarProduto(novoProduto);
 }
+
+export async function listaProdutos() {
+    return await produtoRepository.listaProdutos();
+}
