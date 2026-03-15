@@ -3,24 +3,31 @@ import * as contaRepository from '../repositorys/contaRepository.js';
 
 export async function criarPedido(contaId) {
     if (!contaId) {
-        throw new Error('Id da conta é obrigatório');
+        const erro = new Error("Id da conta é obrigatorio");
+        erro.status = 400;
+        throw erro;
     }
     const conta = await contaRepository.buscarContaPorId(contaId);
-    if (!conta || conta.length === 0) {
-        throw new Error('Conta não existe');
+    if (!conta) {
+        const erro = new Error('Conta não existe');
+        erro.status = 404;
+        throw erro;
     }
-    const contaEncontrada = conta[0];
-    if (contaEncontrada.status === 'FECHADA') {
-        throw new Error('Não é possível criar pedido para conta fechada');
+    if (conta.status === 'FECHADA') {
+        const erro = new Error("Não foi possivel criar pedido porque a conta se encontra fechada");
+        erro.status = 409;
+        throw erro;
     }
-    return await pedidoRepo.criarPedido(contaId);
+    return await pedidoRepository.criarPedido(contaId);
 }
 
 
 export async function listarPedidos(contaId) {
     if (!contaId) {
-        throw new Error('Id da conta é obrigatorio');
+        const erro = new Error("Id da conta é obrigatorio");
+        erro.status = 400;
+        throw erro;
     }
-    return repo.listarPedidos(contaId);
+    return await pedidoRepository.listarPedidos(contaId);
 };
 

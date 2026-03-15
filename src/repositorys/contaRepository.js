@@ -28,7 +28,7 @@ export async function buscarContaAbertaCliente(clienteId) {
 };
 
 export async function deletarConta(contaId) {
-    const comando = `DELETE FROM CONTA WHERE id = ?`;
+    const comando = `DELETE FROM conta WHERE id = ?`;
 
     const [info] = await connection.query(comando,[contaId]);
     return info;

@@ -3,31 +3,31 @@ import * as service from '../services/clienteService.js';
 
 const endpoints = Router();
 
-endpoints.get('/clientes', async (req,resp) => {
+endpoints.get('/clientes', async (req,resp, next) => {
     try {
         const listarClientes = await service.listarClientes();
         resp.status(200).send(listarClientes);
     } catch (err) {
-        resp.status(400).send(err.message);
+        next(err);
     }
 });
 
-endpoints.get('/clientes/:id', async (req,resp) => {
+endpoints.get('/clientes/:id', async (req,resp, next) => {
     try {
-        const clienteId = await service.buscarClientePorId(req.params.id);
-        resp.status(200).send(clienteId);
+        const cliente = await service.buscarClientePorId(req.params.id);
+        resp.status(200).send(cliente);
 
     } catch(err) {
-        resp.status(404).send({erro: err.message});
+        next(err);
     }
 });
 
-endpoints.post('/clientes', async (req,resp) => {
+endpoints.post('/clientes', async (req,resp, next) => {
     try {
         const novoCliente = await service.criarCliente(req.body);
-        resp.status(201).send(novoCliente);
+        resp.status(201).send({ id: novoCliente });
     } catch(err) {
-        resp.status(400).send({erro: err.message});
+        next(err);
     }
 });
 

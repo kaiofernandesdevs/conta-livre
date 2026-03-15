@@ -18,7 +18,7 @@
 
   export async function buscarPedidoAberto(contaId) {
     const comando = `
-      SELECT * FROM pedido WHERE conta_id = ? AND status = 'ABERTO'LIMIT 1`;
+      SELECT * FROM pedido WHERE conta_id = ? AND status = 'ABERTO' LIMIT 1`;
 
     const [rows] = await connection.query(comando, [contaId]);
     return rows.length ? rows[0] : null;

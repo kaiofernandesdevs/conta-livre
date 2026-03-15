@@ -5,8 +5,10 @@ export async function listarClientes() {
 }
 
 export async function criarCliente(novoCliente) {
-    if(!cliente.nome || cliente.nome.trim() == '') {
-        throw new Error("Nome do cliente é Obrigatorio");
+    if(!novoCliente.nome || novoCliente.nome.trim() == '') {
+        const erro = new Error("Nome do cliente deve ser obrigatorio");
+        erro.status = 400;
+        throw erro;
     }
 
     return await clienteRepository.criarCliente(novoCliente);
@@ -14,11 +16,15 @@ export async function criarCliente(novoCliente) {
 
 export async function buscarClientePorId(id) {
     if(!id) {
-        throw new Error("Id obigatorio");
+        const erro = new Error("id do cliente deve ser obrigatorio");
+        erro.status = 400;
+        throw erro;
     }
     const cliente = await clienteRepository.buscarClientePorId(id);
     if(!cliente) {
-        throw new Error('Cliente não encontrado');
+        const erro = new Error("Id não encontrado");
+        erro.status = 404;
+        throw erro;
     }
     return cliente;
 }

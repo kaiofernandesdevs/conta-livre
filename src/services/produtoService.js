@@ -2,25 +2,33 @@ import * as produtoRepository from '../repositorys/produtoRepository.js';
 
 export async function criarProduto(novoProduto) {
     if (!novoProduto.nome || novoProduto.nome.trim() === '') {
-        throw new Error("Nome do Produto é obrigatorio");
+        const erro = new Error("Nome do produto deve ser obrigatorio");
+        erro.status = 400;
+        throw erro;
     }
     if (!novoProduto.preco || novoProduto.preco <= 0) {
-        throw new Error("O produto deve ter preco valido");
+        const erro = new Error("Preco do produto deve ser valido");
+        erro.status = 400;
+        throw erro;
     }
     return await produtoRepository.criarProduto(novoProduto);
 }
 
-export async function listaProdutos() {
+export async function listarProdutos() {
     return await produtoRepository.listaProdutos();
 }
 
 export async function buscarProdutoPorId(id) {
     if (!id) {
-        throw new Error("Id é necessario");
+        const erro = new Error("Id do produto é necessario");
+        erro.status = 400;
+        throw erro;
     }
     const produto = await produtoRepository.buscarProdutoPorId(id);
     if (!produto) {
-        throw new Error("produto nao encontrado");
+        const erro = new Error("Não foi possivel encontrar o produto");
+        erro.status = 404;
+        throw erro;
     }
 
     return produto;
@@ -28,17 +36,23 @@ export async function buscarProdutoPorId(id) {
 
 export async function atualizarProduto(id, produto) {
     if (!produto.nome || produto.nome.trim() === '') {
-        throw new Error('Nome do produto é obrigatório');
+        const erro = new Error("Nome do produto é obrigatorio para atualização");
+        erro.status = 400;
+        throw erro;
     }
 
     if (!produto.preco || produto.preco <= 0) {
-        throw new Error('Preço do produto deve ser maior que zero');
+        const erro = new Error("O preço do produto deve ser valido e maior que zero");
+        erro.status = 400;
+        throw erro;
     }
 
     const produtoAtualizado = await produtoRepository.atualizarProduto(id, produto);
 
     if (produtoAtualizado === 0) {
-        throw new Error('Produto não foi encontrado');
+        const erro = new Error("Produto não foi encontrado");
+        erro.status = 404;
+        throw erro;
     }
     return true;
 }
@@ -47,7 +61,9 @@ export async function inativarProduto(id) {
     const produtoInativado = await produtoRepository.inativarProduto(id);
 
     if (produtoInativado === 0) {
-        throw new Error('Produto não foi encontrado');
+        const erro = new Error("Produto não foi encontrado para ser inativado");
+        erro.status = 404;
+        throw erro;
     }
 
     return true;
