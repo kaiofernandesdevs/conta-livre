@@ -35,8 +35,24 @@ export async function deletarConta(contaId) {
 };
 
 export async function fecharConta(contaId) {
-    const comando = `UPDATE conta SET status = 'FECHADA' WHERE id = ?`;
+    const comando = `UPDATE conta SET status = 'FECHADA', fechada_em = NOW() WHERE id = ?`;
 
     const [info] = await connection.query(comando,[contaId]);
     return info;
+}
+
+export async function atualizarTotalConta(contaId) {
+    const comando = `
+        UPDATE conta 
+        SET total = (
+            SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0)
+            FROM pedido p
+            JOIN item_pedido ip ON p.id = ip.pedido_id
+            WHERE p.conta_id = ? AND p.status = 'FECHADO'
+        )
+        WHERE id = ?
+    `;
+
+    const [info] = await connection.query(comando, [contaId, contaId]);
+    return info.affectedRows;
 }

@@ -31,6 +31,4 @@ endpoints.post('/clientes', async (req,resp, next) => {
     }
 });
 
-
-
 export default endpoints;

@@ -1,4 +1,4 @@
-import clienteRepository from '../repositorys/clienteRepository.js';
+import * as clienteRepository from '../repositorys/clienteRepository.js';
 
 export async function listarClientes() {
     return await clienteRepository.listarClientes();
