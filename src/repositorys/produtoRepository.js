@@ -12,7 +12,7 @@ export async function criarProduto(novoProduto) {
 }
 
 export async function listarProdutos() {
-    const comando = `SELECT * FROM produto WHERE status = 'ATIVO';`;
+    const comando = `SELECT id, nome, descricao, preco, disponivel FROM produto`;
 
     const [info] = await connection.query(comando);
     return info;
@@ -37,12 +37,10 @@ export async function atualizarProduto(id,produto) {
     return info.affectedRows;
 }
 
-export async function inativarProduto(id) {
-    const comando = `
-        UPDATE produto SET status = 'INATIVO' WHERE id = ?;`;
+export async function alterarDisponibilidade(id, disponivel) {
+    const comando = `UPDATE produto SET disponivel = ? WHERE id = ?`;
 
-    const [resultado] = await connection.query(comando, [id]);
+    const [resultado] = await connection.query(comando, [disponivel, id]);
     return resultado.affectedRows;
 }
-
 

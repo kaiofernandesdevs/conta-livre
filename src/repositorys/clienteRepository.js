@@ -18,5 +18,10 @@ export async function buscarClientePorId(id) {
     return info[0];
 }
 
+export async function atualizarCliente(id,cliente) {
+    const comando = 'UPDATE cliente SET nome = ? Where id = ?';
+    const [info] = await connection.query(comando, [cliente.nome,id])
+    return info.affectedRows;
+}
 
 
