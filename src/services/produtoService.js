@@ -15,7 +15,7 @@ export async function criarProduto(novoProduto) {
 }
 
 export async function listarProdutos() {
-    return await produtoRepository.listaProdutos();
+    return await produtoRepository.listarProdutos(); 
 }
 
 export async function buscarProdutoPorId(id) {
@@ -57,11 +57,23 @@ export async function atualizarProduto(id, produto) {
     return true;
 }
 
-export async function inativarProduto(id) {
-    const produtoInativado = await produtoRepository.inativarProduto(id);
+export async function alterarDisponibilidade(id, disponivel) {
+    if (!id) {
+        const erro = new Error("Id do produto é necessário");
+        erro.status = 400;
+        throw erro;
+    }
 
-    if (produtoInativado === 0) {
-        const erro = new Error("Produto não foi encontrado para ser inativado");
+    if (typeof disponivel !== 'boolean') {
+        const erro = new Error("O campo 'disponivel' deve ser um booleano (true ou false)");
+        erro.status = 400;
+        throw erro;
+    }
+
+    const linhasAfetadas = await produtoRepository.alterarDisponibilidade(id, disponivel);
+
+    if (linhasAfetadas === 0) {
+        const erro = new Error("Produto não foi encontrado para ter a disponibilidade alterada");
         erro.status = 404;
         throw erro;
     }
