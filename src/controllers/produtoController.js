@@ -3,6 +3,41 @@ import * as service from '../services/produtoService.js';
 
 const endpoints = Router();
 
+/**
+ * @openapi
+ * /produtos/{id}/disponibilidade:
+ *   patch:
+ *     summary: Altera a disponibilidade de um produto
+ *     tags:
+ *       - Produtos
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID do produto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - disponivel
+ *             properties:
+ *               disponivel:
+ *                 type: boolean
+ *                 example: false
+ *     responses:
+ *       200:
+ *         description: Disponibilidade atualizada com sucesso
+ *       400:
+ *         description: Parâmetro inválido
+ *       404:
+ *         description: Produto não encontrado
+ */
+
 endpoints.get("/produtos", async (req, resp, next) => {
   try {
     const listaProdutos = await service.listarProdutos(); 

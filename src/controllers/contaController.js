@@ -3,6 +3,42 @@ import * as service from '../services/contaService.js';
 
 const endpoints = Router();
 
+/**
+ * @openapi
+ * /contas:
+ *   post:
+ *     summary: Cria uma nova conta para um cliente
+ *     tags:
+ *       - Contas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - clienteId
+ *             properties:
+ *               clienteId:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Conta criada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *       400:
+ *         description: ID do cliente é obrigatório
+ *       409:
+ *         description: Cliente já possui conta aberta
+ */
+
 
 endpoints.get('/contas', async (req, resp, next) => {
     try {

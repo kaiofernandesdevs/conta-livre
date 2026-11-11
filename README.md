@@ -1,532 +1,172 @@
-# 🍺 ContraLivre - Gestão de Contas para Bares e Restaurantes
+# ContraLivre API
 
-ContraLivre é uma aplicação desenvolvida para gerenciar contas de clientes em estabelecimentos como bares e restaurantes. O sistema permite a abertura e o controle de contas, registro de pedidos e organização do fluxo de consumo, substituindo o uso de anotações manuais em cadernos físicos por um processo digital estruturado.
+API REST para gerenciamento de contas de clientes em bares e restaurantes. O sistema permite abrir contas, registrar itens consumidos, controlar pagamentos e manter produtos e clientes em um fluxo simples e organizado.
 
----
+## Visão geral
 
-## 📚 Índice
+- Cadastro e consulta de clientes
+- Abertura e fechamento de contas
+- Adição, atualização e remoção de itens da conta
+- Registro de pagamentos
+- Cadastro e controle de produtos
+- Documentação interativa via Swagger
 
-- [🛠️ Stack Tecnológico](#-stack-tecnológico)
-- [📦 Instalação](#-instalação)
-- [⚙️ Configuração](#️-configuração)
-- [🚀 Como Rodar](#-como-rodar)
-- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
-- [🔌 Endpoints da API](#-endpoints-da-api)
-- [💾 Banco de Dados](#-banco-de-dados)
-- [🏗️ Padrões de Arquitetura](#️-padrões-de-arquitetura)
+## Stack
 
----
+- Node.js
+- Express.js
+- MySQL + mysql2
+- Swagger
+- dotenv
+- CORS
 
-## 🛠️ Stack Tecnológico
+## Pré-requisitos
 
-| Tecnologia | Versão | Descrição |
-|-----------|--------|-----------|
-| **Node.js** | v22+ | Ambiente de execução JavaScript no backend |
-| **Express.js** | ^5.2.1 | Framework para construção da API REST |
-| **MySQL** | Relacional | Banco de dados para persistência |
-| **MySQL2** | ^3.16.0 | Driver MySQL para Node.js |
-| **Nodemon** | ^3.1.11 | Auto-restart em modo desenvolvimento |
-| **CORS** | ^2.8.5 | Habilitação de requisições cross-origin |
-| **dotenv** | ^17.2.3 | Gerenciamento de variáveis de ambiente |
+- Node.js 20+
+- MySQL 8+
+- npm
 
----
+## Instalação
 
-## 📦 Instalação
-
-### Pré-requisitos
-- Node.js v20+
-- MySQL v8+
-- npm ou yarn
-
-### Passos
-
-1. **Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/gestao-bar.git
-cd gestao-bar
-```
-
-2. **Instale as dependências**
-```bash
+git clone <url-do-repositorio>
+cd conta-livre
 npm install
-```
-
-3. **Configure as variáveis de ambiente**
-```bash
 cp .env.exemple .env
 ```
-Edite o arquivo `.env` com suas configurações:
+
+Configure o arquivo `.env`:
+
 ```env
 PORT=5010
 MYSQL_HOST=localhost
 MYSQL_USER=root
-MYSQL_PWD=sua_senha_aqui
-MYSQL_DB=bar
+MYSQL_PWD=sua_senha
+MYSQL_DB=contalivre
 ```
 
-4. **Configure o banco de dados**
+> O arquivo `.env` não deve ser enviado para o repositório.
 
-Crie o banco de dados e as tabelas executando o script SQL:
+## Como executar
 
-```bash
-mysql -u root -p < script-banco.sql
-```
+Modo desenvolvimento:
 
-Ou execute os comandos manualmente no MySQL:
-
-```sql
-CREATE DATABASE bar;
-USE bar;
-
--- Executar todos os CREATEs TABLE da seção "Banco de Dados"
-```
-
----
-
-## ⚙️ Configuração
-
-### Arquivo `.env`
-
-O arquivo `.env` contém todas as variáveis de ambiente necessárias para a aplicação rodar. 
-
-**⚠️ Importante:** Nunca commite o arquivo `.env` no Git (ele está no `.gitignore` por segurança).
-
-Use o arquivo `.env.exemple` como referência para criar seu `.env` local:
-
-```bash
-cp .env.exemple .env
-```
-
-### Variáveis de Ambiente
-
-| Variável | Exemplo | Descrição |
-|----------|---------|-----------|
-| `PORT` | `5010` | Porta em que a API rodará |
-| `MYSQL_HOST` | `localhost` | Host do servidor MySQL |
-| `MYSQL_USER` | `root` | Usuário do MySQL |
-| `MYSQL_PWD` | `senha123` | Senha do MySQL |
-| `MYSQL_DB` | `bar` | Nome do banco de dados |
-
----
-
-## 🚀 Como Rodar
-
-### Desenvolvimento (com auto-reload)
 ```bash
 npm start
 ```
 
-### Produção
-```bash
-node src/app.js
-```
+A API ficará disponível em:
 
-A API estará disponível em: **http://localhost:5010**
+- http://localhost:5010
+- http://localhost:5010/api-docs
 
----
+## Estrutura do projeto
 
-## 📁 Estrutura do Projeto
-
-```
+```text
 src/
-├── app.js                 # Entrada da aplicação
-├── controllers/           # Controladores (requisições HTTP)
+├── app.js
+├── config/
+│   └── swagger.js
+├── controllers/
 │   ├── clienteController.js
 │   ├── contaController.js
-│   ├── pedidoController.js
+│   ├── itemContaController.js
 │   └── produtoController.js
-├── services/             # Lógica de negócio
-│   ├── clienteService.js
-│   ├── contaService.js
-│   ├── pedidoService.js
-│   └── produtoService.js
-├── repositorys/          # Acesso ao banco de dados
+├── middlewares/
+│   └── errorMiddleware.js
+├── repositorys/
+│   ├── connection.js
 │   ├── clienteRepository.js
 │   ├── contaRepository.js
-│   ├── pedidoRepository.js
-│   ├── produtoRepository.js
-│   └── connection.js
-├── routes/               # Definição de rotas
+│   ├── itemContaRepository.js
+│   ├── pagamentoRepository.js
+│   └── produtoRepository.js
+├── routes/
 │   └── routes.js
-└── middlewares/          # Middlewares
-    └── errorMiddleware.js
+├── services/
+│   ├── clienteService.js
+│   ├── contaService.js
+│   ├── itemContaService.js
+│   └── produtoService.js
+└──
 ```
 
----
+## Endpoints principais
 
-## 🔌 Endpoints da API
+### Clientes
 
-### 👥 **CLIENTES**
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/clientes` | Lista clientes |
+| GET | `/clientes/:id` | Busca cliente por ID |
+| POST | `/clientes` | Cria cliente |
+| PUT | `/clientes/:id` | Atualiza cliente |
 
-#### Listar todos os clientes
-```
-GET /clientes
-```
-**Resposta (200):**
-```json
-[
-  {
-    "id": 1,
-    "nome": "João Silva",
-    "criado_em": "2026-05-29T10:30:00.000Z"
-  }
-]
-```
+### Contas
 
-#### Buscar cliente por ID
-```
-GET /clientes/:id
-```
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/contas` | Lista contas |
+| GET | `/contas/:id` | Busca conta por ID |
+| POST | `/contas` | Abre uma conta |
+| POST | `/contas/:id/pagamentos` | Registra pagamento |
+| PATCH | `/contas/:id/fechar` | Fecha a conta |
 
-#### Criar cliente
-```
-POST /clientes
-Content-Type: application/json
+### Produtos
 
-{
-  "nome": "Maria Souza"
-}
-```
-**Resposta (201):** `{ "id": 2 }`
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | `/produtos` | Lista produtos |
+| GET | `/produtos/:id` | Busca produto por ID |
+| POST | `/produtos` | Cria produto |
+| PUT | `/produtos/:id` | Atualiza produto |
+| PATCH | `/produtos/:id/disponibilidade` | Altera disponibilidade |
 
----
+### Itens da conta
 
-### 💰 **CONTAS**
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/contas/:contaId/itens` | Adiciona item à conta |
+| GET | `/contas/:contaId/itens` | Lista itens da conta |
+| PUT | `/contas/:contaId/itens/:itemId` | Atualiza item |
+| DELETE | `/contas/:contaId/itens/:itemId` | Remove item |
 
-#### Listar todas as contas
-```
-GET /contas
-```
-**Resposta (200):**
-```json
-[
-  {
-    "id": 1,
-    "id_cliente": 1,
-    "status": "ABERTA",
-    "total": 150.50,
-    "criada_em": "2026-05-29T10:30:00.000Z",
-    "fechada_em": null
-  }
-]
-```
+## Banco de dados
 
-#### Abrir conta para cliente
-```
-POST /contas
-Content-Type: application/json
+O projeto usa MySQL com as tabelas principais:
 
-{
-  "clienteId": 1
-}
-```
-**Resposta (201):** `{ "id": 1 }`
+- `cliente`
+- `conta`
+- `produto`
+- `item_conta`
+- `pagamento`
 
-#### Fechar conta
-```
-PATCH /contas/:id/fechar
-```
-**Resposta (200):** `{ "msg": "Conta fechada com sucesso" }`
+O esquema pode ser gerado de acordo com a estrutura do projeto e os serviços/repositórios existentes.
 
-#### Deletar conta
-```
-DELETE /contas/:id
-```
-**Resposta (200):** `{ "msg": "conta deletada" }`
-
----
-
-### 🛍️ **PRODUTOS**
-
-#### Listar produtos ativos
-```
-GET /produtos
-```
-**Resposta (200):**
-```json
-[
-  {
-    "id": 1,
-    "nome": "Cerveja",
-    "descricao": "Cerveja gelada",
-    "preco": 12.00,
-    "status": "ATIVO",
-    "criado_em": "2026-05-29T10:30:00.000Z"
-  }
-]
-```
-
-#### Buscar produto por ID
-```
-GET /produtos/:id
-```
-
-#### Criar produto
-```
-POST /produtos
-Content-Type: application/json
-
-{
-  "nome": "Refrigerante",
-  "descricao": "Refrigerante gelado",
-  "preco": 8.50
-}
-```
-**Resposta (201):** `{ "id": 2 }`
-
-#### Atualizar produto
-```
-PUT /produtos/:id
-Content-Type: application/json
-
-{
-  "nome": "Cerveja Premium",
-  "descricao": "Cerveja premium importada",
-  "preco": 15.00
-}
-```
-**Resposta (200):** `true`
-
-#### Inativar produto
-```
-DELETE /produtos/:id
-```
-**Resposta (200):** `{ "mensagem": "Produto foi inativado" }`
-
----
-
-### 📦 **PEDIDOS**
-
-#### Listar pedidos da conta
-```
-GET /contas/:id/pedidos
-```
-**Resposta (200):**
-```json
-[
-  {
-    "id": 1,
-    "conta_id": 1,
-    "data": "2026-05-29T10:30:00.000Z",
-    "status": "ABERTO"
-  }
-]
-```
-
-#### Criar pedido
-```
-POST /contas/:id/pedidos
-```
-**Resposta (201):** `{ "id": 1 }`
-
-#### Fechar pedido
-```
-PATCH /contas/:contaId/pedidos/:pedidoId/fechar
-```
-**Resposta (200):** `{ "msg": "Pedido fechado com sucesso" }`
-
----
-
-### 📋 **ITEMS DO PEDIDO**
-
-#### Adicionar item ao pedido
-```
-POST /contas/:contaId/pedidos/:pedidoId/itens
-Content-Type: application/json
-
-{
-  "produtoId": 1,
-  "quantidade": 2
-}
-```
-**Resposta (201):** `{ "id": 1 }`
-
-#### Listar items do pedido
-```
-GET /contas/:contaId/pedidos/:pedidoId/itens
-```
-**Resposta (200):**
-```json
-{
-  "itensPedido": [
-    {
-      "id": 1,
-      "pedido_id": 1,
-      "produto_id": 1,
-      "quantidade": 2,
-      "preco_unitario": 12.00
-    }
-  ],
-  "totalPedido": 24.00
-}
-```
-
-#### Atualizar quantidade do item
-```
-PUT /contas/:contaId/pedidos/:pedidoId/itens/:itemId
-Content-Type: application/json
-
-{
-  "quantidade": 3
-}
-```
-**Resposta (200):** `{ "msg": "Item atualizado com sucesso" }`
-
-#### Remover item do pedido
-```
-DELETE /contas/:contaId/pedidos/:pedidoId/itens/:itemId
-```
-**Resposta (200):** `{ "msg": "Item removido com sucesso" }`
-
----
-
-## 💾 Banco de Dados
-
-### Tabelas
-
-| Tabela | Descrição |
-|--------|-----------|
-| `cliente` | Dados dos clientes |
-| `conta` | Contas abertas/fechadas |
-| `produto` | Produtos disponíveis |
-| `pedido` | Pedidos da conta |
-| `item_pedido` | Items individuais dos pedidos |
-
-### Schema SQL
-
-```sql
-CREATE TABLE cliente (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL,
-  criado_em DATETIME DEFAULT NOW()
-);
-
-CREATE TABLE conta (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_cliente INT NOT NULL,
-  status ENUM('ABERTA','FECHADA') DEFAULT 'ABERTA',
-  total DECIMAL(10,2) DEFAULT 0,
-  criada_em DATETIME DEFAULT NOW(),
-  fechada_em DATETIME NULL,
-  FOREIGN KEY (id_cliente) REFERENCES cliente(id)
-);
-
-CREATE TABLE produto (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL,
-  descricao VARCHAR(255),
-  preco DECIMAL(10,2) NOT NULL,
-  status ENUM('ATIVO','INATIVO') DEFAULT 'ATIVO',
-  criado_em DATETIME DEFAULT NOW()
-);
-
-CREATE TABLE pedido (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  conta_id INT NOT NULL,
-  data DATETIME DEFAULT NOW(),
-  status ENUM('ABERTO','FECHADO') DEFAULT 'ABERTO',
-  FOREIGN KEY (conta_id) REFERENCES conta(id)
-);
-
-CREATE TABLE item_pedido (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  pedido_id INT NOT NULL,
-  produto_id INT NOT NULL,
-  quantidade INT NOT NULL,
-  preco_unitario DECIMAL(10,2) NOT NULL,
-  FOREIGN KEY (pedido_id) REFERENCES pedido(id),
-  FOREIGN KEY (produto_id) REFERENCES produto(id)
-);
-```
-
----
-
-## 🏗️ Padrões de Arquitetura
-
-### Camadas
-
-```
-Controller ──→ Service ──→ Repository ──→ Banco de Dados
-   ↑             ↑            ↑
-Requisições   Validações   Queries
-   HTTP       Negócio       SQL
-```
-
-### Responsabilidades
-
-- **Controller**: Recebe requisições HTTP e retorna respostas
-- **Service**: Contém a lógica de negócio e validações
-- **Repository**: Responsável pelo acesso ao banco de dados
-
-Esta separação garante:
-- ✅ Organização do código
-- ✅ Escalabilidade
-- ✅ Facilidade de manutenção
-- ✅ Testabilidade
-- ✅ Reutilização de código
-
----
-
-## 🔐 Validações Implementadas
-
-- ✅ Nome do cliente obrigatório
-- ✅ Cliente não pode ter duas contas abertas
-- ✅ Conta deve estar aberta para criar pedidos
-- ✅ Pedido deve estar aberto para adicionar itens
-- ✅ Produto deve estar ATIVO para ser vendido
-- ✅ Quantidade deve ser maior que zero
-- ✅ Não é possível fechar conta com pedidos abertos
-- ✅ Total da conta atualiza automaticamente ao fechar pedido
-
----
-
-## 📝 Códigos de Status HTTP
-
-| Código | Significado |
-|--------|------------|
-| `200` | OK - Requisição bem-sucedida |
-| `201` | Created - Recurso criado |
-| `400` | Bad Request - Dados inválidos |
-| `404` | Not Found - Recurso não encontrado |
-| `409` | Conflict - Conflito de estado |
-| `500` | Internal Server Error - Erro do servidor |
-
----
-
-## 🚦 Exemplo de Fluxo Completo
+## Exemplo de fluxo
 
 ```bash
-# 1. Criar cliente
 curl -X POST http://localhost:5010/clientes \
   -H "Content-Type: application/json" \
   -d '{"nome":"João Silva"}'
 
-# 2. Abrir conta
 curl -X POST http://localhost:5010/contas \
   -H "Content-Type: application/json" \
   -d '{"clienteId":1}'
 
-# 3. Criar pedido
-curl -X POST http://localhost:5010/contas/1/pedidos
-
-# 4. Adicionar item
-curl -X POST http://localhost:5010/contas/1/pedidos/1/itens \
+curl -X POST http://localhost:5010/contas/1/itens \
   -H "Content-Type: application/json" \
   -d '{"produtoId":1,"quantidade":2}'
 
-# 5. Fechar pedido
-curl -X PATCH http://localhost:5010/contas/1/pedidos/1/fechar
-
-# 6. Fechar conta
-curl -X PATCH http://localhost:5010/contas/1/fechar
+curl -X POST http://localhost:5010/contas/1/pagamentos \
+  -H "Content-Type: application/json" \
+  -d '{"valorPagamento":50}'
 ```
 
----
-
-## 📄 Licença
+## Licença
 
 ISC
 
----
+## Observações
 
-**Desenvolvido com dedicação para gestão eficiente de bares e restaurantes.**
+Este projeto está estruturado em camadas: controllers, services e repositories, mantendo a lógica de negócio separada do acesso ao banco de dados e da camada HTTP.

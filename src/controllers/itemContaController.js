@@ -4,6 +4,100 @@ import * as service from '../services/itemContaService.js';
 
 const endpoints = Router();
 
+/**
+ * @openapi
+ * /contas/{contaId}/itens:
+ *   post:
+ *     summary: Adiciona um produto à conta (RF09 / RN05 / RN07)
+ *     tags: [Itens da Conta]
+ *     parameters:
+ *       - in: path
+ *         name: contaId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [produtoId, quantidade]
+ *             properties:
+ *               produtoId:
+ *                 type: integer
+ *                 example: 1
+ *               quantidade:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       201:
+ *         description: Item adicionado à conta com sucesso
+ *       409:
+ *         description: Conta paga ou produto indisponível
+ *   get:
+ *     summary: Lista todos os itens de consumo de uma conta
+ *     tags: [Itens da Conta]
+ *     parameters:
+ *       - in: path
+ *         name: contaId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de itens consumidos
+ * 
+ * /contas/{contaId}/itens/{itemId}:
+ *   put:
+ *     summary: Atualiza a quantidade de um item da conta (RN06 / RN07)
+ *     tags: [Itens da Conta]
+ *     parameters:
+ *       - in: path
+ *         name: contaId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [quantidade]
+ *             properties:
+ *               quantidade:
+ *                 type: integer
+ *                 example: 3
+ *     responses:
+ *       200:
+ *         description: Quantidade atualizada com sucesso
+ *   delete:
+ *     summary: Remove um item da conta (RN06 / RN07)
+ *     tags: [Itens da Conta]
+ *     parameters:
+ *       - in: path
+ *         name: contaId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: itemId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Item removido da conta com sucesso
+ */
+
+
+
 endpoints.post('/contas/:contaId/itens', async (req, resp, next) => {
   try {
     const { contaId } = req.params;
