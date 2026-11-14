@@ -1,10 +1,7 @@
 import { connection } from "./connection.js";
 
 export async function inserirPagamento(contaId, valor) {
-    const comando = `
-        INSERT INTO pagamento (contaId, valor, dataPagamento) 
-        VALUES (?, ?, NOW())
-    `;
+    const comando = `INSERT INTO pagamento (contaId, valor, dataPagamento) VALUES (?, ?, NOW())`;
     const [info] = await connection.query(comando, [contaId, valor]);
     return info.insertId;
 }

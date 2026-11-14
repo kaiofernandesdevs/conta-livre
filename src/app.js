@@ -15,4 +15,5 @@ addRoutes(API);
 
 
 const PORT = process.env.PORT || 5010; 
-API.listen(PORT, () => console.log(`>> The API is running on port ${PORT}`));
+API.listen(PORT, () => console.log(`>> The API is running on port ${PORT} 
+    Acesse o swagger da API: 'http://localhost:5010/api-docs'`));
